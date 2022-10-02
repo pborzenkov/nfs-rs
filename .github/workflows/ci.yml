@@ -1,0 +1,29 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    services:
+      nfsd:
+        image: macadmins/unfs3
+        ports:
+          - 11111:2049/tcp
+          - 11111:2049/udp
+        volumes:
+          - ${github.workspace}/.github/workflows/ci_exports:/etc/exports
+    env:
+      TESTS_NFS_SERVER=nfs://127.0.0.1:11111/?mountport=11111&version=3
+    steps:
+      - uses: actions/checkout@v3
+      - uses: cachix/install-nix-action@v17
+      - uses: cachix/cachix-action@v10
+        with:
+          name: pborzenkov
+          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
+
+      - name: Test
+        run: nix -L flake check

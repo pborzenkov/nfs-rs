@@ -1,0 +1,15 @@
+[package]
+name = "nfs"
+version = "0.1.0"
+authors = ["Pavel Borzenkov <pavel@borzenkov.net>"]
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/pborzenkov/async-nfs-rs"
+description = "Async NFS client on top of libnfs"
+keywords = ["async", "nfs"]
+categories = ["asynchronous", "filesystem", "external-ffi-bindings"]
+
+[dependencies]
+libnfs-sys = "0.2"
+tokio = { version = "1", features = ["full"] }
+url = "2.3"
