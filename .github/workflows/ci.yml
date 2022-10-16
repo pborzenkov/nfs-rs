@@ -16,7 +16,7 @@ jobs:
         volumes:
           - ${github.workspace}/.github/workflows/ci_exports:/etc/exports
     env:
-      TESTS_NFS_SERVER=nfs://127.0.0.1:11111/?mountport=11111&version=3
+      TESTS_NFS_SERVER: "nfs://127.0.0.1:11111/?mountport=11111&version=3"
     steps:
       - uses: actions/checkout@v3
       - uses: cachix/install-nix-action@v17
