@@ -1,4 +1,5 @@
 use nfs;
+use rand::{distributions::Alphanumeric, thread_rng, Rng};
 use std::env;
 
 pub async fn client() -> nfs::Client {
@@ -7,4 +8,12 @@ pub async fn client() -> nfs::Client {
     nfs::Client::mount(srv)
         .await
         .expect("failed to mount NFS server")
+}
+
+pub fn rand_name() -> String {
+    thread_rng()
+        .sample_iter(&Alphanumeric)
+        .take(30)
+        .map(char::from)
+        .collect()
 }

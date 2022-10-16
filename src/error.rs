@@ -29,12 +29,16 @@ impl Error {
         }
     }
 
-    pub fn io_kind(&self) -> io::ErrorKind {
+    pub fn into_io(&self) -> io::Error {
         self.inner
             .source
             .as_ref()
-            .and_then(|source| source.downcast_ref::<io::Error>().map(|err| err.kind()))
-            .unwrap_or(io::ErrorKind::Other)
+            .and_then(|source| {
+                source
+                    .downcast_ref::<io::Error>()
+                    .and_then(|e| Some(io::Error::new(e.kind(), e.to_string())))
+            })
+            .unwrap_or(io::Error::new(io::ErrorKind::Other, self.to_string()))
     }
 }
 
@@ -104,12 +108,12 @@ mod tests {
             "file not found",
             io::Error::new(io::ErrorKind::NotFound, "not found"),
         );
-        assert_eq!(err.io_kind(), io::ErrorKind::NotFound)
+        assert_eq!(err.into_io().kind(), io::ErrorKind::NotFound)
     }
 
     #[test]
     fn non_io_error() {
         let err = url("invalid scheme");
-        assert_eq!(err.io_kind(), io::ErrorKind::Other)
+        assert_eq!(err.into_io().kind(), io::ErrorKind::Other)
     }
 }
