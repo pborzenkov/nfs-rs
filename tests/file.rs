@@ -47,5 +47,10 @@ async fn file_io() {
     }
     drop(rfile);
 
+    client
+        .unlink(&name)
+        .await
+        .expect("failed to remove the file");
+
     client.umount().await.expect("failed to umount");
 }
