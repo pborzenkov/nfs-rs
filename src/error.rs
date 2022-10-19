@@ -36,9 +36,9 @@ impl Error {
             .and_then(|source| {
                 source
                     .downcast_ref::<io::Error>()
-                    .and_then(|e| Some(io::Error::new(e.kind(), e.to_string())))
+                    .map(|e| io::Error::new(e.kind(), e.to_string()))
             })
-            .unwrap_or(io::Error::new(io::ErrorKind::Other, self.to_string()))
+            .unwrap_or_else(|| io::Error::new(io::ErrorKind::Other, self.to_string()))
     }
 }
 
