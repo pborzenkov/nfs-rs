@@ -37,29 +37,13 @@
 
       cargoArtifacts = craneLib.buildDepsOnly (commonArgs // { });
 
-      fmt = craneLib.cargoFmt (commonArgs // { });
-
-      clippy = craneLib.cargoClippy (commonArgs // {
-        inherit cargoArtifacts;
-
-        cargoClippyExtraArgs = "-- --deny warnings";
-      });
-
-      test = craneLib.cargoNextest (commonArgs // {
-        cargoArtifacts = clippy;
-      });
-
       nfs = craneLib.buildPackage (commonArgs // {
-        cargoArtifacts = test;
+        cargoArtifacts = cargoArtifacts;
 
         doCheck = false;
       });
     in
     {
-      checks = {
-        inherit nfs;
-      };
-
       packages.default = nfs;
 
       devShells.default = pkgs.mkShell {
