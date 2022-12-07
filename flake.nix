@@ -21,9 +21,6 @@
     let
       pkgs = import inputs.nixpkgs { inherit system; overlays = [ (import inputs.rust-overlay) ]; };
       rust = pkgs.rust-bin.stable.latest;
-      libnfs = pkgs.libnfs.overrideAttrs (old: {
-        configureFlags = [ "--enable-pthread" ];
-      });
 
       craneLib = (inputs.crane.mkLib pkgs).overrideToolchain rust.default;
 
@@ -31,7 +28,7 @@
         src = ./.;
         nativeBuildInputs = [ pkgs.rustPlatform.bindgenHook ];
         buildInputs = [
-          libnfs
+          pkgs.libnfs
         ];
       };
 
