@@ -13,7 +13,10 @@
     };
     crane = {
       url = "github:ipetkov/crane";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
     };
   };
 
@@ -32,7 +35,9 @@
         ];
       };
 
-      cargoArtifacts = craneLib.buildDepsOnly (commonArgs // { });
+      cargoArtifacts = craneLib.buildDepsOnly (commonArgs // {
+        installCargoArtifactsMode = "use-zstd";
+      });
 
       nfs = craneLib.buildPackage (commonArgs // {
         cargoArtifacts = cargoArtifacts;
