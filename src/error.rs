@@ -59,12 +59,12 @@ impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.inner.kind {
             Kind::Url => f.write_str("URL error")?,
-            Kind::Nfs(msg) => write!(f, "NFS error: {}", msg)?,
+            Kind::Nfs(msg) => write!(f, "NFS error: {msg}")?,
             Kind::Runtime => f.write_str("runtime error")?,
         };
 
         if let Some(e) = &self.inner.source {
-            write!(f, ": {}", e)?;
+            write!(f, ": {e}")?;
         }
 
         Ok(())

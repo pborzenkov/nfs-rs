@@ -141,7 +141,7 @@ impl Client {
             context.check_retcode(libnfs::nfs_open2(
                 context.0,
                 path.as_ptr(),
-                flags.bits() as i32,
+                flags.bits(),
                 mode.bits() as i32,
                 file.as_mut_ptr(),
             ))?;
